@@ -7,3 +7,4 @@ __pycache__/
 ##Ignora las contraseñas
 
 proyecto_final/settings.py
+.idea/
