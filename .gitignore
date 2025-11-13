@@ -1,0 +1,9 @@
+
+##Ignora archivos temporales
+__pycache__/
+
+.pyc
+
+##Ignora las contraseñas
+
+proyecto_final/settings.py
