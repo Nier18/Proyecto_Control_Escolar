@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Control Escolar</title>
+    <!-- Cargamos Tailwind CSS para estilos rápidos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Encabezado -->
+    <header class="bg-blue-800 text-white shadow-md">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-3xl font-bold">Proyecto: Sistema de Control Escolar</h1>
+            <p class="text-lg text-blue-200">Ingeniería de Software</p>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal (Menú + Contenido) -->
+    <div class="container mx-auto p-6 flex flex-col md:flex-row gap-6">
+
+        <!-- Menú Lateral de Consultas -->
+        <nav class="w-full md:w-1/4 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4 border-b pb-2">Consultas</h2>
+            <ul class="space-y-2">
+
+                <li>
+                    <button data-url="{% url 'control_escolar:home_content' %}"
+                        class="query-button w-full text-left p-3 rounded-md bg-gray-100 hover:bg-blue-100 text-gray-800 transition-colors">
+                        Inicio
+                    </button>
+                </li>
+                <li>
+                    <button data-url="{% url 'control_escolar:consulta_prerequisitos' %}"
+                        class="query-button w-full text-left p-3 rounded-md hover:bg-blue-100 text-gray-800 transition-colors">
+                        1. Prerrequisitos de Curso
+                    </button>
+                </li>
+                <li>
+                    <button data-url="{% url 'control_escolar:consulta_transcript' %}"
+                        class="query-button w-full text-left p-3 rounded-md hover:bg-blue-100 text-gray-800 transition-colors">
+                        2. Transcript de Estudiante
+                    </button>
+                </li>
+                <li>
+                    <button data-url="{% url 'control_escolar:consulta_asesor' %}"
+                        class="query-button w-full text-left p-3 rounded-md hover:bg-blue-100 text-gray-800 transition-colors">
+                        3. Asesor de Estudiante
+                    </button>
+                </li>
+                <li>
+                    <button data-url="{% url 'control_escolar:consulta_estudiantes_A' %}"
+                        class="query-button w-full text-left p-3 rounded-md hover:bg-blue-100 text-gray-800 transition-colors">
+                        4. Estudiantes con 'A'
+                    </button>
+                </li>
+                <li>
+                    <button data-url="{% url 'control_escolar:consulta_horario_profesor' %}"
+                        class="query-button w-full text-left p-3 rounded-md hover:bg-blue-100 text-gray-800 transition-colors">
+                        5. Horario de Profesor
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Área de Contenido Dinámico -->
+        <main id="content-container" class="w-full md:w-3/4 bg-white p-8 rounded-lg shadow-md">
+            <!--
+              Esta sección se reemplazará dinámicamente con JavaScript.
+              Este es el contenido inicial.
+            -->
+            <h2 class="text-2xl font-semibold mb-4">Bienvenido</h2>
+            <p class="text-gray-700">
+                Selecciona una consulta del menú de la izquierda para comenzar.
+            </p>
+            <p class="mt-4 text-gray-700">
+                Esta aplicación utiliza una arquitectura desacoplada. La interfaz (HTML) carga los datos de forma asíncrona (con `fetch`) desde *endpoints* de Django, los cuales obtienen su lógica de una capa de servicios (`services.py`).
+            </p>
+        </main>
+    </div>
+
+    <!-- El JavaScript que hace la magia -->
+    <script>
+        // Este token es necesario para que Django acepte peticiones POST (si las hubiera)
+        // Por ahora, solo usaremos GET.
+        const csrfToken = '{{ csrf_token }}';
+
+        // 1. Obtenemos el contenedor donde cargaremos los resultados
+        const contentContainer = document.getElementById('content-container');
+
+        // 2. Obtenemos TODOS los botones del menú
+        const queryButtons = document.querySelectorAll('.query-button');
+
+        // 3. Añadimos un "listener" de clic a cada botón
+        queryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Obtenemos la URL del atributo 'data-url' del botón
+                const urlToFetch = button.dataset.url;
+
+                // Mostramos un mensaje de "Cargando..."
+                contentContainer.innerHTML = `
+                    <div class="text-center p-12">
+                        <p class="text-lg font-semibold text-gray-600">Cargando datos...</p>
+                    </div>`;
+
+                // 4. Hacemos la petición (fetch) al endpoint de Django
+                fetch(urlToFetch)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error en la respuesta de la red');
+                        }
+                        // Esperamos el resultado como texto (HTML)
+                        return response.text();
+                    })
+                    .then(html => {
+                        // 5. Inyectamos el HTML recibido en el contenedor
+                        contentContainer.innerHTML = html;
+                    })
+                    .catch(error => {
+                        // 6. Manejamos cualquier error
+                        console.error('Error al cargar el contenido:', error);
+                        contentContainer.innerHTML = `
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                                <strong class="font-bold">¡Error!</strong>
+                                <span class="block sm:inline">No se pudo cargar el contenido desde ${urlToFetch}. Revisa la consola.</span>
+                            </div>`;
+                    });
+            });
+        });
+    </script>
+
+</body>
+</html>
