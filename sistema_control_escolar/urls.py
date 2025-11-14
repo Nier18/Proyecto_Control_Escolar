@@ -19,4 +19,6 @@ urlpatterns = [
     path('consulta/asesor/', views.consulta_asesor_view, name='consulta_asesor'),
     path('consulta/estudiantes-A/', views.consulta_estudiantes_A_view, name='consulta_estudiantes_A'),
     path('consulta/horario-profesor/', views.consulta_horario_profesor_view, name='consulta_horario_profesor'),
+
+    path('resultado/asesor/', views.consulta_asesor_resultado_view, name='consulta_asesor_resultado'),
 ]
