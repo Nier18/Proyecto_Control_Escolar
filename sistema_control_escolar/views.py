@@ -78,3 +78,11 @@ def consulta_asesor_resultado_view(request):
     student_id = request.GET.get('student_id')
     html_result = services.get_asesor_resultado(student_id=student_id)
     return HttpResponse(html_result)
+
+def consulta_prerequisitos_resultado_view(request):
+    """
+    Endpoint que recibe el ID del curso y devuelve sus prerrequisitos.
+    """
+    course_id = request.GET.get('course_id')
+    html_result = services.get_prerequisitos_resultado(course_id=course_id)
+    return HttpResponse(html_result)

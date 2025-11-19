@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- v=1.0.1 -->
 </head>
+
 <body class="bg-gray-100">
 
     <!-- Encabezado -->
@@ -126,7 +128,7 @@
         // --- Lógica para Manejar el Envío del Formulario (Clic en "Buscar") ---
         // Usamos "Delegación de Eventos"
         // Escuchamos por clics en 'submit' DENTRO del 'contentContainer'
-        contentContainer.addEventListener('submit', function(event) {
+        contentContainer.addEventListener('submit', function (event) {
 
             // Verificamos si el formulario es el de 'form-asesor'
             if (event.target.id === 'form-asesor') {
@@ -162,11 +164,37 @@
                         resultadoDiv.innerHTML = '<p class="text-red-600">Error al consultar el servidor.</p>';
                     });
             }
-            // (Aquí podríamos añadir más 'if' para otros formularios, ej. 'form-prerequisitos')
+
+            // Lógica para el formulario de Prerrequisitos
+            if (event.target.id === 'form-prerequisitos') {
+                event.preventDefault();
+                const form = event.target;
+                const courseIdInput = form.querySelector('#course-id-input');
+                const courseId = courseIdInput.value;
+                const resultadoDiv = form.parentElement.querySelector('#resultado-prerequisitos');
+                const urlToFetch = form.action;
+
+                if (!courseId) {
+                    resultadoDiv.innerHTML = '<p class="text-red-600">Por favor, introduce un ID de curso.</p>';
+                    return;
+                }
+
+                resultadoDiv.innerHTML = '<p class="text-gray-600">Buscando prerrequisitos...</p>';
+
+                fetch(`${urlToFetch}?course_id=${courseId}`)
+                    .then(response => response.text())
+                    .then(htmlResultado => {
+                        resultadoDiv.innerHTML = htmlResultado;
+                    })
+                    .catch(error => {
+                        console.error('Error en fetch (resultado):', error);
+                        resultadoDiv.innerHTML = '<p class="text-red-600">Error al consultar el servidor.</p>';
+                    });
+            }
         });
 
         // --- Cargar el contenido de "Inicio" al cargar la página ---
-        const homeButton = document.querySelector('.query-button[data-url="{% url 'control_escolar:home_content' %}"]');
+        const homeButton = document.querySelector(".query-button[data-url='{% url 'control_escolar:home_content' %}']");
         if (homeButton) {
             loadContent(homeButton.dataset.url, homeButton);
         }
@@ -174,4 +202,5 @@
     </script>
 
 </body>
+
 </html>

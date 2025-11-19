@@ -1,5 +1,5 @@
 # Importamos los modelos de la base de datos
-from .models import Student, Advisor, Instructor
+from .models import Student, Advisor, Instructor, Prereq, Course
 # ¡IMPORTACIÓN NUEVA Y CLAVE!
 from django.urls import reverse
 
@@ -33,11 +33,76 @@ def get_home_content():
 # --- Servicio 1: Prerrequisitos (En Construcción) ---
 
 def get_prerequisitos_content():
-    html = """
+    """
+    Genera el formulario HTML para consultar prerrequisitos.
+    """
+    try:
+        url_del_resultado = reverse('control_escolar:consulta_prerequisitos_resultado')
+    except Exception as e:
+        return f'<p class="text-red-600">Error de configuración de URL: {e}</p>'
+
+    html = f"""
     <h2 class="text-2xl font-semibold mb-4">Consulta 1: Prerrequisitos de un Curso</h2>
-    <p class="text-yellow-700 bg-yellow-100 p-4 rounded-md">Esta funcionalidad está en construcción.</p>
+    
+    <form id="form-prerequisitos" 
+          action="{url_del_resultado}" 
+          class="bg-gray-50 p-6 rounded-lg shadow-sm">
+
+        <label for="course-id-input" class="block text-lg font-medium text-gray-700 mb-2">
+            Introduce el ID del curso:
+        </label>
+
+        <input type="text" 
+               id="course-id-input" 
+               name="course_id" 
+               class="w-full p-2 border border-gray-300 rounded-md"
+               placeholder="Ej. 696">
+
+        <button type="submit" class="mt-4 bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition">
+            Buscar Prerrequisitos
+        </button>
+    </form>
+
+    <div id="resultado-prerequisitos" class="mt-6"></div>
     """
     return html
+
+def get_prerequisitos_resultado(course_id):
+    """
+    Busca los prerrequisitos de un curso y devuelve HTML.
+    """
+    if not course_id:
+        return '<p class="text-red-600">Por favor, introduce un ID de curso.</p>'
+
+    try:
+        # Verificamos si el curso existe primero
+        curso = Course.objects.get(course_id=course_id)
+        
+        # Buscamos sus prerrequisitos
+        # Prereq tiene: course (el curso principal) y prereq (el curso requisito)
+        prerrequisitos = Prereq.objects.filter(course_id=course_id).select_related('prereq')
+
+        if not prerrequisitos.exists():
+             return f'<div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg"><p>El curso <strong>{curso.title} ({course_id})</strong> no tiene prerrequisitos registrados.</p></div>'
+
+        # Construimos la lista de resultados
+        lista_html = '<ul class="list-disc list-inside space-y-2">'
+        for p in prerrequisitos:
+            lista_html += f'<li><strong>{p.prereq.course_id}</strong>: {p.prereq.title} (Créditos: {p.prereq.credits})</li>'
+        lista_html += '</ul>'
+
+        html = f"""
+        <div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg">
+            <p class="font-bold mb-2">Prerrequisitos para {curso.title} ({course_id}):</p>
+            {lista_html}
+        </div>
+        """
+        return html
+
+    except Course.DoesNotExist:
+        return f'<p class="text-red-600">Error: No se encontró ningún curso con el ID <strong>{course_id}</strong>.</p>'
+    except Exception as e:
+        return f'<p class="text-red-600">Error en la consulta: {e}</p>'
 
 
 # --- Servicio 2: Transcript (En Construcción) ---

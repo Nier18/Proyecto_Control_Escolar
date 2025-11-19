@@ -21,4 +21,5 @@ urlpatterns = [
     path('consulta/horario-profesor/', views.consulta_horario_profesor_view, name='consulta_horario_profesor'),
 
     path('resultado/asesor/', views.consulta_asesor_resultado_view, name='consulta_asesor_resultado'),
+    path('resultado/prerequisitos/', views.consulta_prerequisitos_resultado_view, name='consulta_prerequisitos_resultado'),
 ]
