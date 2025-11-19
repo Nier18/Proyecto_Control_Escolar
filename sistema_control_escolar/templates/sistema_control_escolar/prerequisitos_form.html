@@ -1,0 +1,18 @@
+<h2 class="text-2xl font-semibold mb-4">Consulta 1: Prerrequisitos de un Curso</h2>
+
+<form id="form-prerequisitos" action="{% url 'control_escolar:consulta_prerequisitos_resultado' %}"
+    class="bg-gray-50 p-6 rounded-lg shadow-sm">
+
+    <label for="course-id-input" class="block text-lg font-medium text-gray-700 mb-2">
+        Introduce el ID del curso:
+    </label>
+
+    <input type="text" id="course-id-input" name="course_id" class="w-full p-2 border border-gray-300 rounded-md"
+        placeholder="Ej. 696">
+
+    <button type="submit" class="mt-4 bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition">
+        Buscar Prerrequisitos
+    </button>
+</form>
+
+<div id="resultado-prerequisitos" class="mt-6"></div>

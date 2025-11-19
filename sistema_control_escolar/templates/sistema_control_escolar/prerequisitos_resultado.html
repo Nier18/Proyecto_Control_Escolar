@@ -1,0 +1,16 @@
+{% if error %}
+<p class="text-red-600">{{ error }}</p>
+{% elif no_prereqs %}
+<div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg">
+    <p>El curso <strong>{{ curso.title }} ({{ curso.course_id }})</strong> no tiene prerrequisitos registrados.</p>
+</div>
+{% else %}
+<div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg">
+    <p class="font-bold mb-2">Prerrequisitos para {{ curso.title }} ({{ curso.course_id }}):</p>
+    <ul class="list-disc list-inside space-y-2">
+        {% for p in prerrequisitos %}
+        <li><strong>{{ p.prereq.course_id }}</strong>: {{ p.prereq.title }} (Créditos: {{ p.prereq.credits }})</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

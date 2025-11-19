@@ -1,0 +1,12 @@
+{% if error %}
+<p class="text-red-600">{{ error|safe }}</p>
+{% elif no_asesor %}
+<p class="text-yellow-700 bg-yellow-100 p-4 rounded-md">
+    El estudiante <strong>{{ estudiante.name }}</strong> no tiene un asesor asignado.
+</p>
+{% else %}
+<div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg">
+    <p class="font-bold">Resultado:</p>
+    <p>El asesor de <strong>{{ asesoria.s.name }}</strong> es <strong>{{ asesoria.i.name }}</strong>.</p>
+</div>
+{% endif %}

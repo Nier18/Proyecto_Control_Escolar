@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+
 
 # Importamos el archivo de servicios
 try:
@@ -30,43 +30,43 @@ def home_content_view(request):
     """
     Endpoint para cargar el contenido de bienvenida.
     """
-    html_result = services.get_home_content()
-    return HttpResponse(html_result)
+    context = services.get_home_content()
+    return render(request, 'sistema_control_escolar/home_content.html', context)
 
 def consulta_prerequisitos_view(request):
     """
     Endpoint para la Consulta 1 (Formulario).
     """
-    html_result = services.get_prerequisitos_content()
-    return HttpResponse(html_result)
+    context = services.get_prerequisitos_content()
+    return render(request, 'sistema_control_escolar/prerequisitos_form.html', context)
 
 def consulta_transcript_view(request):
     """
     Endpoint para la Consulta 2 (Formulario).
     """
-    html_result = services.get_transcript_content()
-    return HttpResponse(html_result)
+    context = services.get_transcript_content()
+    return render(request, 'sistema_control_escolar/transcript_form.html', context)
 
 def consulta_asesor_view(request):
     """
     Endpoint para la Consulta 3 (Formulario).
     """
-    html_result = services.get_asesor_content()
-    return HttpResponse(html_result)
+    context = services.get_asesor_content()
+    return render(request, 'sistema_control_escolar/asesor_form.html', context)
 
 def consulta_estudiantes_A_view(request):
     """
     Endpoint para la Consulta 4 (Formulario).
     """
-    html_result = services.get_estudiantes_A_content()
-    return HttpResponse(html_result)
+    context = services.get_estudiantes_A_content()
+    return render(request, 'sistema_control_escolar/estudiantes_A_form.html', context)
 
 def consulta_horario_profesor_view(request):
     """
     Endpoint para la Consulta 5 (Formulario).
     """
-    html_result = services.get_horario_profesor_content()
-    return HttpResponse(html_result)
+    context = services.get_horario_profesor_content()
+    return render(request, 'sistema_control_escolar/horario_profesor_form.html', context)
 
 # --- Endpoint de RESULTADOS (Llamado por JavaScript) ---
 
@@ -74,15 +74,14 @@ def consulta_asesor_resultado_view(request):
     """
     Endpoint que recibe el ID de estudiante y devuelve el resultado.
     """
-    # Obtenemos el ID del estudiante desde los parámetros GET
     student_id = request.GET.get('student_id')
-    html_result = services.get_asesor_resultado(student_id=student_id)
-    return HttpResponse(html_result)
+    context = services.get_asesor_resultado(student_id=student_id)
+    return render(request, 'sistema_control_escolar/asesor_resultado.html', context)
 
 def consulta_prerequisitos_resultado_view(request):
     """
     Endpoint que recibe el ID del curso y devuelve sus prerrequisitos.
     """
     course_id = request.GET.get('course_id')
-    html_result = services.get_prerequisitos_resultado(course_id=course_id)
-    return HttpResponse(html_result)
+    context = services.get_prerequisitos_resultado(course_id=course_id)
+    return render(request, 'sistema_control_escolar/prerequisitos_resultado.html', context)
