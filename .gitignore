@@ -8,3 +8,6 @@ __pycache__/
 
 proyecto_final/settings.py
 .idea/
+
+##Ignora la carpeta del entorno virtual
+Entorno
