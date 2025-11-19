@@ -20,9 +20,9 @@
         <tbody class="text-gray-600">
             {% for t in transcript %}
             <tr class="hover:bg-gray-50">
-                <td class="py-2 px-4 border-b">{{ t.course.course.course_id }}</td>
-                <td class="py-2 px-4 border-b">{{ t.course.course.title }}</td>
-                <td class="py-2 px-4 border-b">{{ t.course.semester }} {{ t.course.year }}</td>
+                <td class="py-2 px-4 border-b">{{ t.course_id }}</td>
+                <td class="py-2 px-4 border-b">{{ t.course_title }}</td>
+                <td class="py-2 px-4 border-b">{{ t.semester }} {{ t.year }}</td>
                 <td class="py-2 px-4 border-b font-bold">{{ t.grade }}</td>
             </tr>
             {% endfor %}

@@ -62,13 +62,19 @@ def get_transcript_resultado(student_id):
         return {'error': 'Por favor, introduce un ID de estudiante.'}
 
     try:
+        from django.db.models import OuterRef, Subquery
+        
         # Verificamos si el estudiante existe
         estudiante = Student.objects.get(id=student_id)
 
         # Buscamos los cursos que ha tomado (Takes)
-        # Necesitamos llegar a Course para el titulo: Takes -> Section (course) -> Course (course)
-        # Ordenamos por Año (descendente) y Semestre para que parezca un historial
-        transcript = Takes.objects.filter(id=student_id).select_related('course__course').order_by('-year', 'semester')
+        # Usamos annotate con Subquery para traer el título del curso SIN pasar por section
+        # Esto evita duplicados causados por JOINs incorrectos con la llave compuesta de section
+        transcript = Takes.objects.filter(id=student_id).annotate(
+            course_title=Subquery(
+                Course.objects.filter(course_id=OuterRef('course_id')).values('title')[:1]
+            )
+        ).order_by('-year', 'semester')
 
         if not transcript.exists():
             return {'estudiante': estudiante, 'no_transcript': True}

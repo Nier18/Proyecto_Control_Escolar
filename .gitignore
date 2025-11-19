@@ -11,3 +11,8 @@ proyecto_final/settings.py
 
 ##Ignora la carpeta del entorno virtual
 Entorno
+
+
+##Ignora la carpeta basededatos
+
+basededatos
