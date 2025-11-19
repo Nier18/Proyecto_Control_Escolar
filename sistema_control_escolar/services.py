@@ -1,5 +1,5 @@
 # Importamos los modelos de la base de datos
-from .models import Student, Advisor, Instructor, Prereq, Course
+from .models import Student, Advisor, Instructor, Prereq, Course, Takes
 # Ya no necesitamos 'reverse' aquí porque las URLs se manejan en los templates
 # from django.urls import reverse 
 
@@ -49,10 +49,39 @@ def get_prerequisitos_resultado(course_id):
         return {'error': f'Error en la consulta: {e}'}
 
 
-# --- Servicio 2: Transcript (En Construcción) ---
+# --- Servicio 2: Transcript ---
 
 def get_transcript_content():
     return {}
+
+def get_transcript_resultado(student_id):
+    """
+    Busca el transcript de un estudiante.
+    """
+    if not student_id:
+        return {'error': 'Por favor, introduce un ID de estudiante.'}
+
+    try:
+        # Verificamos si el estudiante existe
+        estudiante = Student.objects.get(id=student_id)
+
+        # Buscamos los cursos que ha tomado (Takes)
+        # Necesitamos llegar a Course para el titulo: Takes -> Section (course) -> Course (course)
+        # Ordenamos por Año (descendente) y Semestre para que parezca un historial
+        transcript = Takes.objects.filter(id=student_id).select_related('course__course').order_by('-year', 'semester')
+
+        if not transcript.exists():
+            return {'estudiante': estudiante, 'no_transcript': True}
+
+        return {
+            'estudiante': estudiante,
+            'transcript': transcript
+        }
+
+    except Student.DoesNotExist:
+        return {'error': f'Error: No se encontró ningún estudiante con el ID {student_id}.'}
+    except Exception as e:
+        return {'error': f'Error en la consulta: {e}'}
 
 
 # --- Servicio 3: Asesor de Estudiante ---

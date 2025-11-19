@@ -127,67 +127,49 @@
 
         // --- Lógica para Manejar el Envío del Formulario (Clic en "Buscar") ---
         // Usamos "Delegación de Eventos"
-        // Escuchamos por clics en 'submit' DENTRO del 'contentContainer'
-        contentContainer.addEventListener('submit', function (event) {
+        // Escuchamos por clics en 'submit' en todo el documento (más robusto)
+        document.body.addEventListener('submit', function (event) {
 
-            // Verificamos si el formulario es el de 'form-asesor'
-            if (event.target.id === 'form-asesor') {
-                // 1. ¡Prevenimos que la página se recargue!
+            // Verificamos si el formulario tiene la clase 'formulario-busqueda-ajax'
+            if (event.target.classList.contains('formulario-busqueda-ajax')) {
                 event.preventDefault();
-
                 const form = event.target;
-                const studentIdInput = form.querySelector('#student-id-input');
-                const studentId = studentIdInput.value;
-                const resultadoDiv = form.parentElement.querySelector('#resultado-asesor');
-                const urlToFetch = form.action; // Obtenemos la URL del 'action' del form
+                const urlToFetch = form.action;
+                const targetSelector = form.dataset.resultTarget;
+                const resultadoDiv = document.querySelector(targetSelector);
 
-                if (!studentId) {
-                    resultadoDiv.innerHTML = '<p class="text-red-600">Por favor, introduce un ID de estudiante.</p>';
+                if (!resultadoDiv) {
+                    console.error('No se encontró el contenedor de resultados:', targetSelector);
                     return;
                 }
 
-                // Mostramos "Cargando..."
+                // Recopilamos los datos del formulario automáticamente
+                const formData = new FormData(form);
+                const params = new URLSearchParams(formData);
+
+                // Validación básica: verificar que al menos un campo tenga valor
+                let hasValue = false;
+                for (const value of params.values()) {
+                    if (value.trim() !== '') {
+                        hasValue = true;
+                        break;
+                    }
+                }
+
+                if (!hasValue) {
+                    resultadoDiv.innerHTML = '<p class="text-red-600">Por favor, completa el campo de búsqueda.</p>';
+                    return;
+                }
+
                 resultadoDiv.innerHTML = '<p class="text-gray-600">Buscando...</p>';
 
-                // 2. Usamos fetch() para llamar al endpoint de resultados
-                // Añadimos el ID del estudiante como un parámetro en la URL
-
-                // Esta es la línea que estaba rota antes, pero que ya está corregida:
-                fetch(`${urlToFetch}?student_id=${studentId}`)
-                    .then(response => response.text())
-                    .then(htmlResultado => {
-                        // 3. Inyectamos el resultado en su div
-                        resultadoDiv.innerHTML = htmlResultado;
-                    })
-                    .catch(error => {
-                        console.error('Error en fetch (resultado):', error);
-                        resultadoDiv.innerHTML = '<p class="text-red-600">Error al consultar el servidor.</p>';
-                    });
-            }
-
-            // Lógica para el formulario de Prerrequisitos
-            if (event.target.id === 'form-prerequisitos') {
-                event.preventDefault();
-                const form = event.target;
-                const courseIdInput = form.querySelector('#course-id-input');
-                const courseId = courseIdInput.value;
-                const resultadoDiv = form.parentElement.querySelector('#resultado-prerequisitos');
-                const urlToFetch = form.action;
-
-                if (!courseId) {
-                    resultadoDiv.innerHTML = '<p class="text-red-600">Por favor, introduce un ID de curso.</p>';
-                    return;
-                }
-
-                resultadoDiv.innerHTML = '<p class="text-gray-600">Buscando prerrequisitos...</p>';
-
-                fetch(`${urlToFetch}?course_id=${courseId}`)
+                fetch(`${urlToFetch}?${params.toString()}`)
                     .then(response => response.text())
                     .then(htmlResultado => {
                         resultadoDiv.innerHTML = htmlResultado;
                     })
                     .catch(error => {
-                        console.error('Error en fetch (resultado):', error);
+                        console.error('Error en fetch:', error);
                         resultadoDiv.innerHTML = '<p class="text-red-600">Error al consultar el servidor.</p>';
                     });
             }

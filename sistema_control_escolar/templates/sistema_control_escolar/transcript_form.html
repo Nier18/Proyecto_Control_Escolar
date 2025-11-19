@@ -1,2 +1,18 @@
 <h2 class="text-2xl font-semibold mb-4">Consulta 2: Transcript de Estudiante</h2>
-<p class="text-yellow-700 bg-yellow-100 p-4 rounded-md">Esta funcionalidad está en construcción.</p>
+
+<form id="form-transcript" action="{% url 'control_escolar:consulta_transcript_resultado' %}"
+    class="formulario-busqueda-ajax bg-gray-50 p-6 rounded-lg shadow-sm" data-result-target="#resultado-transcript">
+
+    <label for="student-id-transcript-input" class="block text-lg font-medium text-gray-700 mb-2">
+        Introduce el ID del estudiante:
+    </label>
+
+    <input type="text" id="student-id-transcript-input" name="student_id"
+        class="w-full p-2 border border-gray-300 rounded-md" placeholder="Ej. 12345">
+
+    <button type="submit" class="mt-4 bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition">
+        Ver Transcript
+    </button>
+</form>
+
+<div id="resultado-transcript" class="mt-6"></div>

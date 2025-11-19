@@ -85,3 +85,11 @@ def consulta_prerequisitos_resultado_view(request):
     course_id = request.GET.get('course_id')
     context = services.get_prerequisitos_resultado(course_id=course_id)
     return render(request, 'sistema_control_escolar/prerequisitos_resultado.html', context)
+
+def consulta_transcript_resultado_view(request):
+    """
+    Endpoint que recibe el ID del estudiante y devuelve su transcript.
+    """
+    student_id = request.GET.get('student_id')
+    context = services.get_transcript_resultado(student_id=student_id)
+    return render(request, 'sistema_control_escolar/transcript_resultado.html', context)

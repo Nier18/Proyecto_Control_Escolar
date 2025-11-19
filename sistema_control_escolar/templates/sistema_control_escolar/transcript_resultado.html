@@ -1,0 +1,32 @@
+{% if error %}
+<p class="text-red-600">{{ error }}</p>
+{% elif no_transcript %}
+<div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg">
+    <p>El estudiante <strong>{{ estudiante.name }}</strong> (ID: {{ estudiante.id }}) no ha tomado cursos aún.</p>
+</div>
+{% else %}
+<div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg">
+    <p class="font-bold mb-2">Transcript de: {{ estudiante.name }} (ID: {{ estudiante.id }})</p>
+
+    <table class="min-w-full bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm">
+        <thead class="bg-gray-100 text-gray-700">
+            <tr>
+                <th class="py-2 px-4 border-b text-left">Curso ID</th>
+                <th class="py-2 px-4 border-b text-left">Título</th>
+                <th class="py-2 px-4 border-b text-left">Semestre/Año</th>
+                <th class="py-2 px-4 border-b text-left">Calificación</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-600">
+            {% for t in transcript %}
+            <tr class="hover:bg-gray-50">
+                <td class="py-2 px-4 border-b">{{ t.course.course.course_id }}</td>
+                <td class="py-2 px-4 border-b">{{ t.course.course.title }}</td>
+                <td class="py-2 px-4 border-b">{{ t.course.semester }} {{ t.course.year }}</td>
+                <td class="py-2 px-4 border-b font-bold">{{ t.grade }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
