@@ -93,3 +93,19 @@ def consulta_transcript_resultado_view(request):
     student_id = request.GET.get('student_id')
     context = services.get_transcript_resultado(student_id=student_id)
     return render(request, 'sistema_control_escolar/transcript_resultado.html', context)
+
+def consulta_estudiantes_A_resultado_view(request):
+    """
+    Endpoint que recibe el ID del curso y devuelve los estudiantes con 'A'.
+    """
+    course_id = request.GET.get('course_id')
+    context = services.get_estudiantes_A_resultado(course_id=course_id)
+    return render(request, 'sistema_control_escolar/estudiantes_A_resultado.html', context)
+
+def consulta_horario_profesor_resultado_view(request):
+    """
+    Endpoint que recibe el ID del profesor y devuelve su horario.
+    """
+    instructor_id = request.GET.get('instructor_id')
+    context = services.get_horario_profesor_resultado(instructor_id=instructor_id)
+    return render(request, 'sistema_control_escolar/horario_profesor_resultado.html', context)

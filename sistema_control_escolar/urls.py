@@ -23,4 +23,6 @@ urlpatterns = [
     path('resultado/asesor/', views.consulta_asesor_resultado_view, name='consulta_asesor_resultado'),
     path('resultado/prerequisitos/', views.consulta_prerequisitos_resultado_view, name='consulta_prerequisitos_resultado'),
     path('resultado/transcript/', views.consulta_transcript_resultado_view, name='consulta_transcript_resultado'),
+    path('resultado/estudiantes-A/', views.consulta_estudiantes_A_resultado_view, name='consulta_estudiantes_A_resultado'),
+    path('resultado/horario-profesor/', views.consulta_horario_profesor_resultado_view, name='consulta_horario_profesor_resultado'),
 ]

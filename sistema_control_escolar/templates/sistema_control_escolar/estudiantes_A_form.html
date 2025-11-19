@@ -1,2 +1,20 @@
 <h2 class="text-2xl font-semibold mb-4">Consulta 4: Estudiantes con Calificación 'A'</h2>
-<p class="text-yellow-700 bg-yellow-100 p-4 rounded-md">Esta funcionalidad está en construcción.</p>
+
+<form id="form-estudiantes-A" action="{% url 'control_escolar:consulta_estudiantes_A_resultado' %}"
+    class="formulario-busqueda-ajax bg-gray-50 p-6 rounded-lg shadow-sm" data-result-target="#resultado-estudiantes-A">
+
+    <label for="course-id-input-A" class="block text-lg font-medium text-gray-700 mb-2">
+        Introduce el ID del curso:
+    </label>
+    <div class="flex gap-2">
+        <input type="text" id="course-id-input-A" name="course_id"
+            class="flex-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Ej. 239">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+            Buscar
+        </button>
+    </div>
+    <div id="resultado-estudiantes-A" class="mt-6">
+        <!-- Aquí se cargarán los resultados vía AJAX -->
+    </div>
+</form>

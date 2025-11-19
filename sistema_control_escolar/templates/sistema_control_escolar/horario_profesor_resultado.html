@@ -1,0 +1,86 @@
+{% if error %}
+<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+    <p class="font-bold">Error</p>
+    <p>{{ error }}</p>
+</div>
+{% elif no_classes %}
+<div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+    <p class="font-bold">Sin clases</p>
+    <p>El profesor <strong>{{ instructor.name }}</strong> ({{ instructor.id }}) no tiene clases asignadas.</p>
+</div>
+{% else %}
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+            Horario de {{ instructor.name }}
+        </h3>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+            ID Profesor: {{ instructor.id }} | Dept: {{ instructor.dept_name.dept_name }}
+        </p>
+    </div>
+    <div class="border-t border-gray-200">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Curso
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Sección
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Semestre/Año
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Horario
+                    </th>
+                    <th scope="col"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Aula
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for item in resultados %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ item.clase.course.course.title }}
+                        <span class="text-gray-500 font-normal">({{ item.clase.course.course.course_id }})</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ item.clase.sec_id }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ item.clase.semester }} {{ item.clase.year }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {% if item.slots %}
+                        {% for slot in item.slots %}
+                        <div>
+                            <span class="font-bold">{{ slot.day }}:</span>
+                            {{ slot.start_hr }}:{{ slot.start_min|stringformat:"02d" }} -
+                            {{ slot.end_hr }}:{{ slot.end_min|stringformat:"02d" }}
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <span class="text-gray-400">Sin horario ({{ item.clase.course.time_slot_id }})</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {% if item.clase.course.building_id %}
+                        {{ item.clase.course.building_id }} - {{ item.clase.course.room_number }}
+                        {% else %}
+                        <span class="text-gray-400">Por asignar</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
