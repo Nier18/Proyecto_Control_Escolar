@@ -1,5 +1,6 @@
 # Importamos los modelos de la base de datos
 from .models import Student, Advisor, Instructor, Prereq, Course, Takes, Teaches, TimeSlot
+from django.templatetags.static import static
 # Ya no necesitamos 'reverse' aquí porque las URLs se manejan en los templates
 # from django.urls import reverse 
 

@@ -1,13 +1,16 @@
 {% if error %}
 <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
     <p class="font-bold">Error</p>
-    <p>{{ error }}</p>
+    <p>{{ error }}
+        <br>
+        <img src="static/sistema_control_escolar/Error.jpg" alt="Error" width="100">
+
+    </p>
 </div>
 {% elif no_students %}
 <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
     <p class="font-bold">Sin resultados</p>
-    <p>No se encontraron estudiantes con calificación 'A' (incluyendo A- y A+) en el curso <strong>{{ curso.title
-            }}</strong> ({{ curso.course_id }}).</p>
+    <p>No se encontraron estudiantes con calificación 'A' (incluyendo A- y A+) en el curso <strong>{{ curso.title}}</strong> ({{ curso.course_id }}).</p>
 </div>
 {% else %}
 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
